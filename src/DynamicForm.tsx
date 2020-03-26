@@ -44,19 +44,19 @@ const FormItemType = {
 
 export interface IFormItemProps {
   type:
-    | 'input'
-    | 'select'
-    | 'area'
-    | 'date'
-    | 'switch'
-    | 'extraInput'
-    | 'radio'
-    | 'rangeDatePicker'
-    | 'coverRadio'
-    | 'image'
-    | 'custom'
-    | 'multiplePicker'
-    | 'checkbox';
+  | 'input'
+  | 'select'
+  | 'area'
+  | 'date'
+  | 'switch'
+  | 'extraInput'
+  | 'radio'
+  | 'rangeDatePicker'
+  | 'coverRadio'
+  | 'image'
+  | 'custom'
+  | 'multiplePicker'
+  | 'checkbox';
   title: string;
   fieldProps: string;
   required?: boolean;

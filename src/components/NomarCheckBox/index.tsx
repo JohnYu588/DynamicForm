@@ -1,51 +1,69 @@
-import React, { FC } from 'react';
-import { Checkbox, List } from 'antd';
-import 'antd/lib/checkbox/style/index.less';
-import 'antd/lib/list/style/index.less';
-import { CheckboxGroupProps } from 'antd/lib/checkbox/index';
+import React, { FC, useState } from 'react';
+import { Rule } from 'rc-field-form/es/interface';
 import Field from '../Field';
+import CheckBoxGroup from './checkBoxgroup';
 import '../../styles/index.less';
 
-interface INomarCheckBoxProps extends CheckboxGroupProps {
+interface INomarCheckBoxProps {
   title: string;
-  rules?: [];
+  rules?: Rule[];
   required?: boolean;
   data?: any;
   fieldProps: string;
   hasStar?: boolean;
+  subTitle?: string | React.ReactNode;
+  coverStyle?: React.CSSProperties;
+  onChange?: (currentActiveLink: (string | number)[]) => void;
+  disabled?: boolean;
+  hidden?: boolean;
 }
 
 const NomarCheckBox: FC<INomarCheckBoxProps> = props => {
+  const [initValue, setInitValue] = useState([]);
   const {
+    coverStyle,
     fieldProps,
     title,
     rules,
     required = false,
     data = [],
     hasStar = true,
-    ...otherProps
+    subTitle,
+    onChange,
+    disabled = false,
+    hidden = false,
   } = props;
 
   return (
-    <div className="alitajs-dform-nomarCheckBoxStyle">
-      <p className="alitajs-dform-title-content">
-        {required && hasStar && <span className="alitajs-dform-redStar">*</span>}
-        <span id={fieldProps} className="alitajs-dform-title">
-          {title}
-        </span>
-      </p>
-      <Field name={fieldProps} rules={rules || [{ required, message: `请选择${title}` }]}>
-        <Checkbox.Group style={{ width: '100%' }} {...otherProps}>
-          <div className="alitajs-dform-itemStyle">
-            {[...data].map(item => (
-              <List.Item key={item.value}>
-                <Checkbox value={item.value}>{item.label}</Checkbox>
-              </List.Item>
-            ))}
+    <>
+      {!hidden && (
+        <div className="alitajs-dform-check-box">
+          <div className="alitajs-dform-vertical-title">
+            {required && hasStar && <span className="alitajs-dform-redStar">*</span>}
+            <span id={fieldProps} className="alitajs-dform-title">
+              {title}
+            </span>
+            {subTitle}
           </div>
-        </Checkbox.Group>
-      </Field>
-    </div>
+          <Field
+            name={fieldProps}
+            rules={rules || [{ required, message: `请选择${title}` }]}
+            shouldUpdate={(prevValue: any, nextValue: any) => {
+              setInitValue(nextValue && nextValue[fieldProps as any]);
+              return prevValue !== nextValue;
+            }}
+          >
+            <CheckBoxGroup
+              data={data}
+              onChange={onChange}
+              coverStyle={coverStyle}
+              initValue={initValue}
+              disabled={disabled}
+            />
+          </Field>
+        </div>
+      )}
+    </>
   );
 };
 

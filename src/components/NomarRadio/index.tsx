@@ -1,10 +1,9 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { List } from 'antd-mobile';
-import { Radio } from 'antd';
-import { RadioGroupProps } from 'antd/lib/radio/interface';
+import { Rule } from 'rc-field-form/es/interface';
 import classnames from 'classnames';
 import Field from '../Field';
-import 'antd/lib/radio/style/index.less';
+import NomarRadioGroup from './radioGroup';
 import '../../styles/index.less';
 
 interface radioItem {
@@ -12,80 +11,92 @@ interface radioItem {
   value: string;
 }
 
-export interface INomarRadioProps extends RadioGroupProps {
+export interface INomarRadioProps {
   fieldProps: string;
   title: string;
-  rules?: [];
+  rules?: Rule[];
   required?: boolean;
   placeholder?: string;
   data?: radioItem[] | [];
   positionType?: 'horizontal' | 'vertical';
   coverStyle?: React.CSSProperties;
   hasStar?: boolean;
+  radioType?: 'horizontal' | 'vertical';
+  subTitle?: string | React.ReactNode;
+  onChange?: (currentActiveLink: string) => void;
+  hidden?: boolean;
 }
 
-const radioList = [
-  {
-    label: '是',
-    value: true,
-  },
-  {
-    label: '否',
-    value: false,
-  },
-];
-
 const NomarRadio: FC<INomarRadioProps> = props => {
+  const [initValue, setInitValue] = useState('');
   const {
     coverStyle,
     fieldProps,
     required = false,
     rules,
     title,
-    placeholder,
-    data = radioList as any,
+    data = [],
     positionType = 'horizontal',
     hasStar = true,
-    ...otherProps
+    radioType = 'horizontal',
+    subTitle,
+    onChange,
+    hidden = false,
   } = props;
 
-  const isVertical = positionType === 'vertical';
+  let isVertical = positionType === 'vertical';
+  if (radioType === 'vertical') {
+    isVertical = true;
+  }
 
   const RadioGroup = () => (
-    <Field name={fieldProps} rules={rules || [{ required, message: `请选择${title}` }]}>
-      <Radio.Group className="alitajs-dform-fixRadioStyle" style={coverStyle} {...otherProps}>
-        {data.map((item: radioItem) => (
-          <Radio key={item.label} value={item.value}>
-            {item.label}
-          </Radio>
-        ))}
-      </Radio.Group>
+    <Field
+      name={fieldProps}
+      rules={rules || [{ required, message: `请选择${title}` }]}
+      shouldUpdate={(prevValue: any, nextValue: any) => {
+        setInitValue(nextValue && nextValue[fieldProps as any]);
+        return prevValue !== nextValue;
+      }}
+    >
+      <NomarRadioGroup
+        data={data}
+        positionType={positionType}
+        radioType={radioType}
+        initValue={initValue}
+        onChange={onChange}
+        coverStyle={coverStyle}
+      />
     </Field>
   );
 
   return (
     <>
-      {isVertical && (
-        <p className="alitajs-dform-vertical-title">
-          {required && hasStar && <span className="alitajs-dform-redStar">*</span>}
-          <span id={fieldProps} className="alitajs-dform-title">
-            {title}
-          </span>
-        </p>
+      {!hidden && (
+        <React.Fragment>
+          {isVertical && (
+            <div className="alitajs-dform-vertical-title">
+              {required && hasStar && <span className="alitajs-dform-redStar">*</span>}
+              <span id={fieldProps} className="alitajs-dform-title">
+                {title}
+              </span>
+              {subTitle}
+            </div>
+          )}
+          <div
+            className={classnames({
+              'alitajs-dform-vertical-radio': isVertical,
+              'alitajs-dform-radio': true,
+            })}
+          >
+            <List.Item key={fieldProps} extra={RadioGroup()}>
+              {required && hasStar && <span className="alitajs-dform-redStar">*</span>}
+              <span id={fieldProps} className="alitajs-dform-title">
+                {title}
+              </span>
+            </List.Item>
+          </div>
+        </React.Fragment>
       )}
-      <div
-        className={classnames({
-          'alitajs-dform-vertical-radio': isVertical,
-          'alitajs-dform-radio': true,
-        })}
-      >
-        <List.Item key={fieldProps} style={coverStyle} extra={RadioGroup()}>
-          {required && hasStar && <span className="alitajs-dform-redStar">*</span>}
-          <span id={fieldProps} className="alitajs-dform-title">
-            {title}
-          </span>
-        </List.Item>
-      </div>
     </>
   );
 };

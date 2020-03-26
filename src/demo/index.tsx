@@ -43,6 +43,40 @@ const radioList = [
   },
 ];
 
+const sexList = [
+  {
+    label: '男',
+    value: 'man',
+  },
+  {
+    label: '女',
+    value: 'woman',
+  },
+];
+
+const foodList = [
+  {
+    label: '宫保鸡丁',
+    value: '宫保鸡丁',
+  },
+  {
+    label: '可乐鸡翅',
+    value: '可乐鸡翅',
+  },
+  {
+    label: '爆炒虾仁',
+    value: '爆炒虾仁',
+  },
+  {
+    label: '清蒸小黄鱼',
+    value: '清蒸小黄鱼',
+  },
+  {
+    label: '红烧肉',
+    value: '红烧肉',
+  },
+];
+
 const Page: FC = () => {
   const [form] = useForm();
   const onFinish = (values: Store) => {
@@ -73,6 +107,13 @@ const Page: FC = () => {
       data: seasons,
     },
     {
+      type: 'multiplePicker',
+      fieldProps: 'userFood',
+      data: foodList,
+      title: '选择喜欢的食物(多选)',
+      placeholder: '请选择',
+    },
+    {
       type: 'switch',
       fieldProps: 'userswitch',
       required: true,
@@ -82,8 +123,13 @@ const Page: FC = () => {
     {
       type: 'area',
       fieldProps: 'usertextarea',
-      required: true,
       placeholder: '多行输入',
+      title: '备注',
+      positionType: 'horizontal',
+      coverStyle: {
+        border: '1px solid #108ee9',
+        background: '#fff',
+      },
     },
     {
       type: 'date',
@@ -108,6 +154,12 @@ const Page: FC = () => {
       required: true,
       title: '发票',
       data: radioList,
+    },
+    {
+      type: 'coverRadio',
+      title: '性别',
+      data: sexList,
+      fieldProps: 'userSex',
     },
     {
       type: 'rangeDatePicker',
@@ -165,6 +217,13 @@ const Page: FC = () => {
       positionType: 'vertical',
     },
     {
+      type: 'coverRadio',
+      title: '性别',
+      data: sexList,
+      positionType: 'vertical',
+      fieldProps: 'userSex2',
+    },
+    {
       type: 'rangeDatePicker',
       fieldProps: 'datePicker5',
       fieldProps2: 'datePicker6',
@@ -175,6 +234,9 @@ const Page: FC = () => {
   ] as IFormItemProps[];
   const formsValues = {
     useronlyread: '原始文档，没有变更',
+    userSex: 'man',
+    userSex2: 'woman',
+    userFood: ['爆炒虾仁', '红烧肉'],
   };
   const formProps = {
     onFinish,

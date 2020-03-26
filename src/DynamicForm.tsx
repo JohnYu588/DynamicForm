@@ -5,27 +5,29 @@ import { InputItemPropsType } from 'antd-mobile/es/input-item/PropsType';
 import { DatePickerPropsType } from 'antd-mobile/es/date-picker/PropsType';
 import { CardHeaderPropsType } from 'antd-mobile/es/card/PropsType';
 import Form from 'rc-field-form';
-import { Store, FormInstance, ValidateErrorEntity } from 'rc-field-form/es/interface';
+import { Store, FormInstance, ValidateErrorEntity, Rule } from 'rc-field-form/es/interface';
 import { getByteLen } from './utils';
 
 import {
   NomarInput,
   NomarPicker,
   NomarSwitch,
-  OnlyReadInput,
   NomarTextArea,
   NomarDatePicker,
   ExtraInput,
   RangeDatePicker,
   NomarRadio,
   NomarCheckBox,
+  CoverRadio,
+  NomarImagePicker,
+  NomarCustom,
+  MultiplePicker,
 } from './components';
 
 import NewFieldPicker from './components/NewFieldPicker/NewFieldPicker';
 
 const FormItemType = {
   input: NomarInput,
-  text: OnlyReadInput,
   select: NomarPicker,
   area: NomarTextArea,
   date: NomarDatePicker,
@@ -34,12 +36,15 @@ const FormItemType = {
   extraInput: ExtraInput,
   rangeDatePicker: RangeDatePicker,
   checkbox: NomarCheckBox,
+  coverRadio: CoverRadio,
+  image: NomarImagePicker,
+  custom: NomarCustom,
+  multiplePicker: MultiplePicker,
 };
 
 export interface IFormItemProps {
   type:
     | 'input'
-    | 'text'
     | 'select'
     | 'area'
     | 'date'
@@ -47,6 +52,10 @@ export interface IFormItemProps {
     | 'extraInput'
     | 'radio'
     | 'rangeDatePicker'
+    | 'coverRadio'
+    | 'image'
+    | 'custom'
+    | 'multiplePicker'
     | 'checkbox';
   title: string;
   fieldProps: string;
@@ -58,12 +67,22 @@ export interface IFormItemProps {
   modeType?: DatePickerPropsType['mode'];
   fieldProps2?: string;
   placeholder2?: string;
+  rules?: Rule[];
   extraType?: 'input' | 'select';
   editable?: boolean;
   rows?: number;
   labelNumber?: number;
   positionType?: 'vertical' | 'horizontal';
   hasStar?: boolean;
+  firstProps?: any;
+  secondProps?: any;
+  radioType?: 'vertical' | 'horizontal';
+  selectable?: boolean;
+  limitSize?: number;
+  CustomDom?: any;
+  customDomProps?: any;
+  subTitle?: string | React.ReactNode;
+  maxValueLength?: number;
 }
 
 interface CardDForm extends CardHeaderPropsType {
@@ -173,23 +192,20 @@ const renderCardMain = (formData: DFormData, allDisabled: boolean, autoLineFeed:
           )}
         </List>
       </Card>
-      <WhiteSpace size="lg" />
     </WingBlank>
   );
 };
 
-const renderListMain = (formData: DFormData, allDisabled: boolean, autoLineFeed: boolean) => {
-  return (
-    <>
-      <List>
-        {changeData(formData as IFormItemProps[], autoLineFeed).map(item =>
-          getFormItem(item, allDisabled),
-        )}
-      </List>
-      <WhiteSpace size="lg" />
-    </>
-  );
-};
+const renderListMain = (formData: DFormData, allDisabled: boolean, autoLineFeed: boolean) => (
+  <>
+    <List>
+      {changeData(formData as IFormItemProps[], autoLineFeed).map(item =>
+        getFormItem(item, allDisabled),
+      )}
+    </List>
+    <WhiteSpace size="lg" />
+  </>
+);
 
 const renderMainList = (
   type: DFormType,

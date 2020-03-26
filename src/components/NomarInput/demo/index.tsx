@@ -6,7 +6,7 @@ import React, { FC } from 'react';
 import { Button, WhiteSpace } from 'antd-mobile';
 import { Field, useForm } from 'rc-field-form';
 import { Store, ValidateErrorEntity } from 'rc-field-form/es/interface';
-
+// 所有需要从 rc-field-form 中导出的字段都可以在 dform 中导出
 import DynamicForm, { IFormItemProps } from '../../../DynamicForm';
 import PositionIcon from '../../../assets/position_ico.png';
 import PhotoIcon from '../../../assets/photo.png';
@@ -33,15 +33,21 @@ const Page: FC<PageProps> = () => {
 
   const photoImg = () => <img src={PhotoIcon} style={{ width: '3rem', height: '2rem' }} />;
 
+  const subTitle = () => <div style={{ color: 'red' }}>此为必填项(副标题)</div>;
+
   const formsData = [
     {
       type: 'input',
       fieldProps: 'username',
       required: true,
-      placeholder: '请输入',
+      placeholder: '输入项居左',
       title: '用户名',
       inputType: 'text',
       clear: true,
+      subTitle: subTitle(),
+      coverStyle: {
+        textAlign: 'left',
+      },
     },
     {
       type: 'input',
@@ -83,7 +89,7 @@ const Page: FC<PageProps> = () => {
       type: 'input',
       fieldProps: 'userTitle',
       required: true,
-      placeholder: '',
+      placeholder: '存在点击事件',
       title: '标题',
       editable: false,
       // eslint-disable-next-line no-console
@@ -106,6 +112,7 @@ const Page: FC<PageProps> = () => {
       placeholder: '请输入',
       title: '标题名称过长(超过14个字符自动换行)',
       inputType: 'text',
+      extra: photoImg(),
       clear: true,
     },
     {
@@ -113,10 +120,18 @@ const Page: FC<PageProps> = () => {
       fieldProps: 'cardNumber',
       required: true,
       placeholder: '请输入',
-      title: '身份证号码',
+      title: '身份证号码(增加规则)',
       inputType: 'text',
       clear: true,
+      subTitle: subTitle(),
       positionType: 'vertical',
+      rules: [
+        { required: true, message: `请输入` },
+        {
+          pattern: new RegExp(/^[0-9a-zA-Z_]{1,}$/, 'g'),
+          message: '名称只允许包含数字、字母和下划线',
+        },
+      ],
     },
   ] as IFormItemProps[];
   const formsValues = {

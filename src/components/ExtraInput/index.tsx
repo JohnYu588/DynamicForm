@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { InputItem, Picker, List } from 'antd-mobile';
 import { InputItemPropsType } from 'antd-mobile/es/input-item/PropsType';
 import classnames from 'classnames';
+import { Rule } from 'rc-field-form/es/interface';
 import Field from '../Field';
 import { NomarInput } from '..';
 import '../../styles/index.less';
@@ -12,13 +13,17 @@ export interface IExtraInputProps extends InputItemPropsType {
   fieldProps2?: string;
   placeholder2?: string;
   required?: boolean;
-  rules?: [];
+  rules?: Rule[];
   title: string;
   coverStyle?: React.CSSProperties;
   extraType?: 'input' | 'select';
   positionType?: 'vertical' | 'horizontal';
   data?: any;
   hasStar?: boolean;
+  firstProps?: InputItemPropsType;
+  secondProps?: any;
+  subTitle?: string | React.ReactNode;
+  hidden?: boolean;
 }
 
 const ExtraInput: FC<IExtraInputProps> = props => {
@@ -35,6 +40,10 @@ const ExtraInput: FC<IExtraInputProps> = props => {
     positionType = 'vertical',
     hasStar = true,
     data,
+    firstProps,
+    secondProps,
+    subTitle,
+    hidden = false,
     ...otherProps
   } = props;
 
@@ -44,7 +53,14 @@ const ExtraInput: FC<IExtraInputProps> = props => {
     if (extraType === 'select') {
       return (
         <Field name={fieldProps2} rules={rules || [{ required, message: `请输入${title}` }]}>
-          <Picker style={coverStyle} title={title} data={data} cascade={false} extra={placeholder2}>
+          <Picker
+            {...secondProps}
+            style={coverStyle}
+            title={title}
+            data={data}
+            cascade={false}
+            extra={placeholder2}
+          >
             <List.Item arrow="horizontal"></List.Item>
           </Picker>
         </Field>
@@ -55,6 +71,7 @@ const ExtraInput: FC<IExtraInputProps> = props => {
       <Field name={fieldProps2} rules={rules || [{ required, message: `请输入${title}` }]}>
         <InputItem
           {...otherProps}
+          {...secondProps}
           type={inputType}
           style={{ textAlign: 'right', ...coverStyle }}
           placeholder={placeholder2}
@@ -65,39 +82,45 @@ const ExtraInput: FC<IExtraInputProps> = props => {
 
   return (
     <>
-      {isVertical && (
-        <p className="alitajs-dform-vertical-title">
-          {required && hasStar && <span className="alitajs-dform-redStar">*</span>}
-          <span id={fieldProps} className="alitajs-dform-title">
-            {title}
-          </span>
-        </p>
+      {!hidden && (
+        <React.Fragment>
+          {isVertical && (
+            <div className="alitajs-dform-vertical-title">
+              {required && hasStar && <span className="alitajs-dform-redStar">*</span>}
+              <span id={fieldProps} className="alitajs-dform-title">
+                {title}
+              </span>
+              {subTitle}
+            </div>
+          )}
+          <div
+            className={classnames({
+              'alitajs-dform-extra-input': true,
+              'alitajs-dform-extra-horizontal': !isVertical,
+            })}
+          >
+            <div className={`alitajs-dform-begin${isVertical ? '-vertical' : ''}-input`}>
+              <NomarInput
+                {...otherProps}
+                {...firstProps}
+                required={required}
+                rules={rules}
+                coverStyle={{ textAlign: 'left', ...coverStyle }}
+                fieldProps={fieldProps}
+                title={title}
+                extra=""
+              />
+            </div>
+            {extraType === 'input' && <div className="alitajs-dform-line">~</div>}
+            <div
+              className={`alitajs-dform-end${isVertical ? '-vertical' : ''}-input`}
+              style={{ width: isVertical ? '' : '' }}
+            >
+              {extraDiv()}
+            </div>
+          </div>
+        </React.Fragment>
       )}
-      <div
-        className={classnames({
-          'alitajs-dform-extra-input': true,
-          'alitajs-dform-extra-horizontal': !isVertical,
-        })}
-      >
-        <div className={`alitajs-dform-begin${isVertical ? '-vertical' : ''}-input`}>
-          <NomarInput
-            {...otherProps}
-            required={required}
-            rules={rules}
-            coverStyle={{ textAlign: 'left', ...coverStyle }}
-            fieldProps={fieldProps}
-            title={title}
-            extra=""
-          />
-        </div>
-        {extraType === 'input' && <div className="alitajs-dform-line">~</div>}
-        <div
-          className={`alitajs-dform-end${isVertical ? '-vertical' : ''}-input`}
-          style={{ width: isVertical ? '' : '' }}
-        >
-          {extraDiv()}
-        </div>
-      </div>
     </>
   );
 };

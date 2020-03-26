@@ -6,6 +6,7 @@ import React, { FC } from 'react';
 import { Button, WhiteSpace } from 'antd-mobile';
 import { Field, useForm } from 'rc-field-form';
 import { Store, ValidateErrorEntity } from 'rc-field-form/es/interface';
+// 所有需要从 rc-field-form 中导出的字段都可以在 dform 中导出
 import DynamicForm, { IFormItemProps } from '../../../DynamicForm';
 import PhotoIcon from '../../../assets/photo.png';
 
@@ -51,6 +52,10 @@ const Page: FC = () => {
       placeholder: '请输入',
       labelNumber: 8,
       required: true,
+      coverStyle: {
+        border: '1px solid #108ee9',
+        background: '#fff',
+      },
     },
     {
       type: 'area',

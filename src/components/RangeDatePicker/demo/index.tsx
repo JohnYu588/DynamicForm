@@ -6,6 +6,7 @@ import React, { FC } from 'react';
 import { Button, WhiteSpace } from 'antd-mobile';
 import { Field, useForm } from 'rc-field-form';
 import { Store, ValidateErrorEntity } from 'rc-field-form/es/interface';
+// 所有需要从 rc-field-form 中导出的字段都可以在 dform 中导出
 import DynamicForm, { IFormItemProps } from '../../../DynamicForm';
 
 const tailLayout = {
@@ -31,6 +32,12 @@ const RangeDatePicker: FC = () => {
       fieldProps2: 'rangeTime2',
       title: '时间(datetime)',
       modeType: 'datetime',
+      firstProps: {
+        onOk: (val: any) => {
+          // eslint-disable-next-line no-console
+          console.log(val);
+        },
+      },
     },
     {
       type: 'rangeDatePicker',

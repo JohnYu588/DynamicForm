@@ -42,12 +42,13 @@
     "antd-mobile": "^2.3.1",
     "classnames": "^2.2.6",
     "copy-to-clipboard": "^3.2.0",
-    "rc-field-form": "^0.0.0-alpha.30"
+    "rc-field-form": "1.1.1",
+    "rollup-plugin-auto-named-exports": "^1.0.0-beta.3"
   },
   "peerDependencies": {
     "antd": "^3.26.7",
     "antd-mobile": "^2.3.1",
-    "react": "^16.8.5"
+    "react": "^16.13.1"
   },
   "devDependencies": {
     "@umijs/fabric": "2.0.0-beta.4",

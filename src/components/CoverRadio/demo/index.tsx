@@ -18,7 +18,6 @@ const sexList = [
   { label: '男', value: 'man' },
   { label: '女', value: 'woman' },
 ];
-
 const foodList = [
   {
     label: '宫保鸡丁',

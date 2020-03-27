@@ -216,9 +216,9 @@ const renderMainList = (
   if (type === 'CARD') {
     return renderCardMain(formData, allDisabled, autoLineFeed);
   }
-  if (type === 'CARDLIST') {
-    return (formData as CardDForm[]).map(item => renderCardMain(item, allDisabled, autoLineFeed));
-  }
+  // if (type === 'CARDLIST') {
+  //   return (formData as CardDForm[]).map(item => renderCardMain(item, allDisabled, autoLineFeed));
+  // }
   if (type === 'NORMALLIST') {
     return (formData as IFormItemProps[][]).map(item =>
       renderListMain(item, allDisabled, autoLineFeed),

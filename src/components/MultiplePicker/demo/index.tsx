@@ -4,14 +4,7 @@
  */
 import React, { FC } from 'react';
 import { Button, WhiteSpace } from 'antd-mobile';
-import { Field, useForm } from 'rc-field-form';
-import { Store, ValidateErrorEntity } from 'rc-field-form/es/interface';
-// 所有需要从 rc-field-form 中导出的字段都可以在 dform 中导出
-import DynamicForm, { IFormItemProps } from '../../../DynamicForm';
-
-const tailLayout = {
-  wrapperCol: { offset: 2, span: 20 },
-};
+import DynamicForm, { IFormItemProps, useForm, Store, ValidateErrorEntity } from '@alitajs/dform';
 
 const Page: FC = () => {
   const [form] = useForm();
@@ -54,7 +47,8 @@ const Page: FC = () => {
       fieldProps: 'myFood',
       required: true,
       data: foodList,
-      title: '选择我喜欢的食物',
+      title: '我喜欢的食物',
+      labelNumber: 7,
       placeholder: '请选择我喜欢的食物',
       onChange: (e: (string | number)[]) => {
         // eslint-disable-next-line no-console
@@ -85,14 +79,13 @@ const Page: FC = () => {
     isDev: true,
   };
   return (
-    <DynamicForm {...formProps}>
+    <>
+      <DynamicForm {...formProps} />
       <WhiteSpace size="sm" />
-      <Field {...tailLayout}>
-        <Button type="primary" onClick={() => form.submit()}>
-          Submit
-        </Button>
-      </Field>
-    </DynamicForm>
+      <Button type="primary" onClick={() => form.submit()}>
+        Submit
+      </Button>
+    </>
   );
 };
 

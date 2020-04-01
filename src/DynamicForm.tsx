@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import React, { FC, useEffect } from 'react';
-import { List, Card, WingBlank, WhiteSpace } from 'antd-mobile';
+import { List, Card, WingBlank } from 'antd-mobile';
 import { InputItemPropsType } from 'antd-mobile/es/input-item/PropsType';
 import { DatePickerPropsType } from 'antd-mobile/es/date-picker/PropsType';
 import { CardHeaderPropsType } from 'antd-mobile/es/card/PropsType';
@@ -22,6 +22,7 @@ import {
   NomarImagePicker,
   NomarCustom,
   MultiplePicker,
+  AddressPicker,
 } from './components';
 
 import NewFieldPicker from './components/NewFieldPicker/NewFieldPicker';
@@ -40,23 +41,25 @@ const FormItemType = {
   image: NomarImagePicker,
   custom: NomarCustom,
   multiplePicker: MultiplePicker,
+  addressPicker: AddressPicker,
 };
 
 export interface IFormItemProps {
   type:
-  | 'input'
-  | 'select'
-  | 'area'
-  | 'date'
-  | 'switch'
-  | 'extraInput'
-  | 'radio'
-  | 'rangeDatePicker'
-  | 'coverRadio'
-  | 'image'
-  | 'custom'
-  | 'multiplePicker'
-  | 'checkbox';
+    | 'input'
+    | 'select'
+    | 'area'
+    | 'date'
+    | 'switch'
+    | 'extraInput'
+    | 'radio'
+    | 'rangeDatePicker'
+    | 'coverRadio'
+    | 'image'
+    | 'custom'
+    | 'multiplePicker'
+    | 'addressPicker'
+    | 'checkbox';
   title: string;
   fieldProps: string;
   required?: boolean;
@@ -84,6 +87,9 @@ export interface IFormItemProps {
   subTitle?: string | React.ReactNode;
   maxValueLength?: number;
   onBlur?: (value?: string) => void;
+  level?: number;
+  onChangeLevel?: (val: any) => void;
+  placeholderList: string[];
 }
 
 interface CardDForm extends CardHeaderPropsType {
@@ -204,7 +210,6 @@ const renderListMain = (formData: DFormData, allDisabled: boolean, autoLineFeed:
         getFormItem(item, allDisabled),
       )}
     </List>
-    <WhiteSpace size="lg" />
   </>
 );
 
@@ -217,9 +222,9 @@ const renderMainList = (
   if (type === 'CARD') {
     return renderCardMain(formData, allDisabled, autoLineFeed);
   }
-  // if (type === 'CARDLIST') {
-  //   return (formData as CardDForm[]).map(item => renderCardMain(item, allDisabled, autoLineFeed));
-  // }
+  if (type === 'CARDLIST') {
+    return (formData as CardDForm[]).map(item => renderCardMain(item, allDisabled, autoLineFeed));
+  }
   if (type === 'NORMALLIST') {
     return (formData as IFormItemProps[][]).map(item =>
       renderListMain(item, allDisabled, autoLineFeed),

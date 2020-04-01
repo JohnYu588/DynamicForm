@@ -1,27 +1,30 @@
 import { Rule } from 'rc-field-form/es/interface';
 
-export interface IDataItem {
+export interface IModalData {
   label: string;
-  value: string;
+  value: string | number;
   flag?: boolean;
 }
 
-export interface IMultiplePickerProps {
-  data: IDataItem[];
+export interface IAddressPickerProps {
   fieldProps: string;
   title: string;
   positionType?: 'horizontal' | 'vertical';
   required?: boolean;
   hasStar?: boolean;
   rules?: Rule[];
-  onChange?: (currentActiveLink: (string | number)[]) => void;
+  onChange?: (currentActiveLink: any) => void;
   subTitle?: string | React.ReactNode;
-  coverStyle?: React.CSSProperties;
   hidden?: boolean;
   placeholder?: string;
-  initValue?: (string | number)[];
+  extra?: string | React.ReactNode;
   disabled?: boolean;
-  maxValueLength?: number;
+  level: number;
+  data?: IModalData[];
+  onChangeLevel: (value: (string | number)[]) => void;
+  placeholderList: string[];
+  initValue?: any;
   labelNumber?: number;
+  coverStyle?: React.CSSProperties;
   onClick?: () => void;
 }
